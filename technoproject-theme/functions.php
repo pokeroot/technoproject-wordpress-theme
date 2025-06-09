@@ -152,20 +152,26 @@ function technoproject_enqueue_react_app() {
 // --- Initialize Custom Post Types, Taxonomies, APIs from the architecture document ---
 // (These would be calls to files within the 'includes' directory)
 
-// Example CPT registration (structure taken from document 4.1)
-// require_once get_template_directory() . '/includes/custom-post-types/course-post-type.php';
-// add_action( 'init', 'register_course_post_type' ); // Assuming function is in the required file
+// Register Custom Post Types
+require_once get_template_directory() . '/includes/custom-post-types/course-cpt.php';
+add_action( 'init', 'technoproject_register_course_post_type', 0 ); // Priority 0 to register early
+
+// Register Taxonomies
+require_once get_template_directory() . '/includes/taxonomies/course-category-taxonomy.php';
+add_action( 'init', 'technoproject_register_course_category_taxonomy', 0 ); // Priority 0 to register early
+require_once get_template_directory() . '/includes/taxonomies/skill-tag-taxonomy.php';
+add_action( 'init', 'technoproject_register_skill_tag_taxonomy', 0 ); // Priority 0 to register early
 
 // Example Custom Roles (structure taken from document 4.3)
 // require_once get_template_directory() . '/includes/user-roles.php';
 // add_action( 'init', 'add_technoproject_user_roles' );
 
-// Example API registration (structure taken from document 4.2)
-// require_once get_template_directory() . '/includes/api-endpoints/Technoproject_Courses_Controller.php';
-// add_action( 'rest_api_init', function () {
-//     $controller = new Technoproject_Courses_Controller();
-//     $controller->register_routes();
-// });
+// Register API Endpoints
+require_once get_template_directory() . '/includes/api-endpoints/Technoproject_Courses_Controller.php';
+add_action( 'rest_api_init', function () {
+    $controller = new Technoproject_Courses_Controller();
+    $controller->register_routes();
+} );
 
 // Example Security Headers (structure taken from document 6.3)
 // require_once get_template_directory() . '/includes/security/class-security-headers.php';

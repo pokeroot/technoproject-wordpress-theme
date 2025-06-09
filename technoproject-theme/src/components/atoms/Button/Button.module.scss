@@ -1,0 +1,111 @@
+// technoproject-theme/src/components/atoms/Button/Button.module.scss
+@import '../../../styles/settings/variables'; // Example import, adjust path if needed
+@import '../../../styles/tools/mixins';       // Example import
+
+.button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: $spacing-2 $spacing-4; // Example using variables
+  border: 1px solid transparent;
+  border-radius: $radius-base;
+  font-family: $font-family-primary;
+  font-size: $font-size-base;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all $transition-base;
+  text-decoration: none; // For anchor tags styled as buttons
+  white-space: nowrap;
+
+  &:disabled,
+  &.loading {
+    opacity: 0.65;
+    cursor: not-allowed;
+  }
+
+  // Variants
+  &.primary {
+    // Example using mixin from section 5.2
+    @include button-variant($color-primary, white);
+  }
+
+  &.secondary {
+    @include button-variant($color-secondary, $color-primary);
+    // Or, if secondary is an outline button:
+    // background-color: transparent;
+    // color: $color-primary;
+    // border-color: $color-primary;
+    // &:hover:not(:disabled) {
+    //   background-color: rgba($color-primary, 0.1);
+    // }
+  }
+
+  &.tertiary {
+     background-color: $color-gray-200;
+     color: $color-gray-800;
+     &:hover:not(:disabled) {
+         background-color: $color-gray-300;
+     }
+  }
+
+  &.danger {
+    @include button-variant($color-error, white);
+  }
+
+  &.link {
+    background-color: transparent;
+    border-color: transparent;
+    color: $color-secondary; // Or primary link color
+    padding: 0;
+    text-decoration: underline;
+    &:hover:not(:disabled) {
+      color: darken($color-secondary, 10%);
+      transform: none;
+      box-shadow: none;
+    }
+  }
+
+  // Sizes
+  &.small {
+    padding: $spacing-1 $spacing-2;
+    font-size: $font-size-sm;
+  }
+
+  &.large {
+    padding: $spacing-3 $spacing-6;
+    font-size: $font-size-lg;
+  }
+
+  &.fullWidth {
+    width: 100%;
+  }
+}
+
+.iconLeft {
+  margin-right: $spacing-2;
+}
+
+.iconRight {
+  margin-left: $spacing-2;
+}
+
+.text {
+  // Base text styling if needed, often inherited is fine
+}
+
+// Basic Spinner for isLoading state
+.spinner {
+  width: 1em;
+  height: 1em;
+  border: 2px solid currentColor;
+  border-right-color: transparent;
+  border-radius: 50%;
+  animation: spin 0.75s linear infinite;
+  margin-right: $spacing-2; // If there's text following
+}
+
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
