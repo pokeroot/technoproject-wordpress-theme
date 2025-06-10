@@ -25,14 +25,19 @@ module.exports = merge(common, {
     hot: true, // Enable Hot Module Replacement
     historyApiFallback: true, // For single-page applications
     open: true, // Open the browser after server had been started
-    // Proxy API requests to WordPress backend if running WP dev server separately
-    // proxy: {
-    //   '/wp-json': {
-    //     target: 'http://your-local-wp-site.dev', // Your local WordPress URL
-    //     changeOrigin: true,
-    //     secure: false,
-    //   },
-    // },
+    proxy: {
+      '/wp-json': { // Proxy requests that start with /wp-json
+        target: 'https://technoproject.com.co', // Your production/staging WordPress site
+        changeOrigin: true, // Important for virtual hosted sites
+        secure: false, // Allow proxying to HTTPS sites, even if dev server is HTTP (though both should ideally be HTTPS)
+        // You might need to configure pathRewrite if your WordPress is in a subdirectory on the target,
+        // but for /wp-json directly under the domain, it's usually not needed.
+        // pathRewrite: { '^/api': '' }, // Example: if you wanted to proxy /api to target's root
+
+        // Optional: Add a log level to see proxy activity in the console
+        logLevel: 'debug'
+      }
+    },
     client: {
       overlay: { // Show errors and warnings in the browser overlay
         errors: true,
