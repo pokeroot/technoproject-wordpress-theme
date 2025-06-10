@@ -7,6 +7,24 @@
  * @package Technoproject
  */
 
+/**
+ * Restringe los endpoints de usuarios de la API REST solo para administradores.
+ */
+add_filter( 'rest_endpoints', function( $endpoints ) {
+    // Verificar si el usuario actual tiene permisos de administrador.
+    // Usamos 'manage_options' como una capacidad que solo los administradores suelen tener.
+    if ( ! current_user_can( 'manage_options' ) ) {
+        // Si no es admin, buscamos los endpoints de usuarios y los eliminamos.
+        if ( isset( $endpoints['/wp/v2/users'] ) ) {
+            unset( $endpoints['/wp/v2/users'] );
+        }
+        if ( isset( $endpoints['/wp/v2/users/(?P<id>[\d]+)'] ) ) {
+            unset( $endpoints['/wp/v2/users/(?P<id>[\d]+)'] );
+        }
+    }
+    return $endpoints;
+});
+
 if ( ! defined( 'TECHNOPROJECT_VERSION' ) ) {
     // Replace with the actual version of your theme
     define( 'TECHNOPROJECT_VERSION', '0.1.0' );
