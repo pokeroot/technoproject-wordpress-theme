@@ -5,8 +5,8 @@
   "description": "Frontend React application for the Technoproject WordPress theme.",
   "main": "src/index.tsx",
   "scripts": {
-    "start": "webpack serve --config webpack.dev.js",
-    "build": "webpack --config webpack.prod.js",
+    "start": "node --max-old-space-size=4096 ./node_modules/.bin/webpack serve --config webpack.dev.js",
+    "build": "node --max-old-space-size=4096 ./node_modules/.bin/webpack --config webpack.prod.js",
     "lint": "eslint . --ext .ts,.tsx",
     "format": "prettier --write \"src/**/*.{ts,tsx,scss,json}\"",
     "test": "echo \"Error: no test specified yet\" && exit 1"

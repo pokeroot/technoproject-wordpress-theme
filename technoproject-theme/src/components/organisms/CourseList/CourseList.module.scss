@@ -1,0 +1,22 @@
+// technoproject-theme/src/components/organisms/CourseList/CourseList.module.scss
+@import '../../../styles/settings/variables'; // If needed for grid or global settings
+
+.courseList {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); // Responsive grid
+  gap: $spacing-6; // Example gap, adjust as needed
+  padding: $spacing-4 0; // Padding around the list
+}
+
+.loadingState,
+.errorState,
+.emptyState {
+  padding: $spacing-8;
+  text-align: center;
+  font-size: $font-size-lg;
+  color: $color-gray-600;
+}
+
+.errorState {
+  color: $color-error;
+}

@@ -167,6 +167,21 @@ class Technoproject_Courses_Controller extends WP_REST_Controller {
         // Example for a custom field (meta)
         // $data['level'] = get_post_meta( $post->ID, 'course_level', true );
 
+        if ( ! empty( $schema['properties']['short_description'] ) ) {
+            $data['short_description'] = get_post_meta( $post->ID, '_technoproject_short_description', true );
+        }
+        if ( ! empty( $schema['properties']['level'] ) ) {
+            $data['level'] = get_post_meta( $post->ID, '_technoproject_level', true );
+        }
+        if ( ! empty( $schema['properties']['format'] ) ) {
+            $data['format'] = get_post_meta( $post->ID, '_technoproject_format', true );
+        }
+        if ( ! empty( $schema['properties']['course_categories'] ) ) {
+            $data['course_categories'] = $this->get_taxonomy_terms( $post->ID, 'course_category' );
+        }
+        if ( ! empty( $schema['properties']['skill_tags'] ) ) {
+            $data['skill_tags'] = $this->get_taxonomy_terms( $post->ID, 'skill_tag' );
+        }
 
         $context = ! empty( $request['context'] ) ? $request['context'] : 'view';
         $data    = $this->add_additional_fields_to_object( $data, $request );
@@ -178,6 +193,23 @@ class Technoproject_Courses_Controller extends WP_REST_Controller {
         $response->add_links( $this->prepare_links( $post ) );
 
         return $response;
+    }
+
+    /**
+     * Helper function to get terms for a given post and taxonomy.
+     *
+     * @param int    $post_id Post ID.
+     * @param string $taxonomy Taxonomy slug.
+     * @return array Array of term objects or specific fields.
+     */
+    protected function get_taxonomy_terms( $post_id, $taxonomy ) {
+        $terms = get_the_terms( $post_id, $taxonomy );
+        if ( is_wp_error( $terms ) || empty( $terms ) ) {
+            return array();
+        }
+        return array_map( function( $term ) {
+            return array( 'id' => $term->term_id, 'name' => $term->name, 'slug' => $term->slug );
+        }, $terms );
     }
 
     /**
@@ -255,6 +287,49 @@ class Technoproject_Courses_Controller extends WP_REST_Controller {
                     'description' => __( 'A named status for the object.', 'technoproject' ),
                     'type'        => 'string',
                     'context'     => array( 'view', 'edit' ),
+                 ),
+                 'short_description' => array(
+                     'description' => __( 'A short description for the course.', 'technoproject' ),
+                     'type'        => 'string',
+                     'context'     => array( 'view', 'edit', 'embed' ),
+                 ),
+                 'level'             => array(
+                     'description' => __( 'The difficulty level of the course.', 'technoproject' ),
+                     'type'        => 'string',
+                     'context'     => array( 'view', 'edit', 'embed' ),
+                     // 'enum' could be used here if levels are predefined: ['beginner', 'intermediate', 'advanced']
+                 ),
+                 'format'            => array(
+                     'description' => __( 'The format of the course.', 'technoproject' ),
+                     'type'        => 'string',
+                     'context'     => array( 'view', 'edit', 'embed' ),
+                     // 'enum' could be used here: ['online', 'hybrid', 'presencial']
+                 ),
+                 'course_categories' => array(
+                     'description' => __( 'Course categories associated with the course.', 'technoproject' ),
+                     'type'        => 'array',
+                     'items'       => array(
+                         'type'    => 'object',
+                         'properties' => array(
+                             'id'   => array( 'type' => 'integer' ),
+                             'name' => array( 'type' => 'string' ),
+                             'slug' => array( 'type' => 'string' ),
+                         ),
+                     ),
+                     'context'     => array( 'view', 'edit', 'embed' ),
+                 ),
+                 'skill_tags'        => array(
+                     'description' => __( 'Skill tags associated with the course.', 'technoproject' ),
+                     'type'        => 'array',
+                     'items'       => array(
+                         'type'    => 'object',
+                         'properties' => array(
+                             'id'   => array( 'type' => 'integer' ),
+                             'name' => array( 'type' => 'string' ),
+                             'slug' => array( 'type' => 'string' ),
+                         ),
+                     ),
+                     'context'     => array( 'view', 'edit', 'embed' ),
                  ),
              ),
          );

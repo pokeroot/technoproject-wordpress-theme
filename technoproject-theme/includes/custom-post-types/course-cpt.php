@@ -68,6 +68,43 @@ function technoproject_register_course_post_type() {
         'rewrite'               => array( 'slug' => 'cursos', 'with_front' => false ), // Added with_front
     );
     register_post_type( 'course', $args );
+
+    // Register CPT Metafields
+    register_post_meta(
+        'course',
+        '_technoproject_short_description',
+        array(
+            'type'              => 'string',
+            'description'       => 'A short description for the course.',
+            'single'            => true,
+            'show_in_rest'      => true,
+            'sanitize_callback' => 'sanitize_textarea_field',
+        )
+    );
+
+    register_post_meta(
+        'course',
+        '_technoproject_level',
+        array(
+            'type'              => 'string',
+            'description'       => 'The difficulty level of the course (e.g., beginner, intermediate, advanced).',
+            'single'            => true,
+            'show_in_rest'      => true,
+            'sanitize_callback' => 'sanitize_text_field',
+        )
+    );
+
+    register_post_meta(
+        'course',
+        '_technoproject_format',
+        array(
+            'type'              => 'string',
+            'description'       => 'The format of the course (e.g., online, hybrid, presencial).',
+            'single'            => true,
+            'show_in_rest'      => true,
+            'sanitize_callback' => 'sanitize_text_field',
+        )
+    );
 }
 // Note: The hook add_action( 'init', 'technoproject_register_course_post_type' );
-// will be added to functions.php in a subsequent step or subtask.
+// is in functions.php
