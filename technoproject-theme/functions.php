@@ -7,24 +7,6 @@
  * @package Technoproject
  */
 
-/**
- * Restringe los endpoints de usuarios de la API REST solo para administradores.
- */
-add_filter( 'rest_endpoints', function( $endpoints ) {
-    // Verificar si el usuario actual tiene permisos de administrador.
-    // Usamos 'manage_options' como una capacidad que solo los administradores suelen tener.
-    if ( ! current_user_can( 'manage_options' ) ) {
-        // Si no es admin, buscamos los endpoints de usuarios y los eliminamos.
-        if ( isset( $endpoints['/wp/v2/users'] ) ) {
-            unset( $endpoints['/wp/v2/users'] );
-        }
-        if ( isset( $endpoints['/wp/v2/users/(?P<id>[\d]+)'] ) ) {
-            unset( $endpoints['/wp/v2/users/(?P<id>[\d]+)'] );
-        }
-    }
-    return $endpoints;
-});
-
 if ( ! defined( 'TECHNOPROJECT_VERSION' ) ) {
     // Replace with the actual version of your theme
     define( 'TECHNOPROJECT_VERSION', '0.1.0' );
@@ -203,5 +185,22 @@ add_action( 'rest_api_init', function () {
 // Example JWT Auth (structure taken from document 6.2)
 // require_once get_template_directory() . '/includes/auth/class-jwt-auth.php';
 // new Technoproject_JWT_Auth();
+
+/**
+ * Restringe los endpoints de usuarios de la API REST solo para administradores.
+ * Esto previene la enumeración de usuarios, que es un riesgo de seguridad.
+ */
+add_filter( 'rest_endpoints', function( $endpoints ) {
+    // Si el usuario actual no puede gestionar opciones (capacidad de administrador), eliminamos los endpoints.
+    if ( ! current_user_can( 'manage_options' ) ) {
+        if ( isset( $endpoints['/wp/v2/users'] ) ) {
+            unset( $endpoints['/wp/v2/users'] );
+        }
+        if ( isset( $endpoints['/wp/v2/users/(?P<id>[\d]+)'] ) ) {
+            unset( $endpoints['/wp/v2/users/(?P<id>[\d]+)'] );
+        }
+    }
+    return $endpoints;
+});
 
 ?>
