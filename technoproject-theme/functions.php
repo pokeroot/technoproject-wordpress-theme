@@ -186,4 +186,21 @@ add_action( 'rest_api_init', function () {
 // require_once get_template_directory() . '/includes/auth/class-jwt-auth.php';
 // new Technoproject_JWT_Auth();
 
+/**
+ * Restringe los endpoints de usuarios de la API REST solo para administradores.
+ * Esto previene la enumeración de usuarios, que es un riesgo de seguridad.
+ */
+add_filter( 'rest_endpoints', function( $endpoints ) {
+    // Si el usuario actual no puede gestionar opciones (capacidad de administrador), eliminamos los endpoints.
+    if ( ! current_user_can( 'manage_options' ) ) {
+        if ( isset( $endpoints['/wp/v2/users'] ) ) {
+            unset( $endpoints['/wp/v2/users'] );
+        }
+        if ( isset( $endpoints['/wp/v2/users/(?P<id>[\d]+)'] ) ) {
+            unset( $endpoints['/wp/v2/users/(?P<id>[\d]+)'] );
+        }
+    }
+    return $endpoints;
+});
+
 ?>
