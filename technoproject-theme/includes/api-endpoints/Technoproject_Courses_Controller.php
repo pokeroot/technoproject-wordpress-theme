@@ -147,10 +147,21 @@ class Technoproject_Courses_Controller extends WP_REST_Controller {
             $data['slug'] = $post->post_name;
         }
         if ( ! empty( $schema['properties']['date'] ) ) {
-            $data['date'] = $this->prepare_date_response( $post->post_date_gmt, $post->post_date );
+            // Ensure post_date_gmt is not '0000-00-00 00:00:00' which can cause issues
+            if ( '0000-00-00 00:00:00' === $post->post_date_gmt ) {
+                $data['date_gmt'] = null;
+            } else {
+                $data['date_gmt'] = mysql_to_rfc3339( $post->post_date_gmt );
+            }
+            $data['date'] = mysql_to_rfc3339( $post->post_date );
         }
         if ( ! empty( $schema['properties']['modified'] ) ) {
-            $data['modified'] = $this->prepare_date_response( $post->post_modified_gmt, $post->post_modified );
+            if ( '0000-00-00 00:00:00' === $post->post_modified_gmt ) {
+                $data['modified_gmt'] = null;
+            } else {
+                $data['modified_gmt'] = mysql_to_rfc3339( $post->post_modified_gmt );
+            }
+            $data['modified'] = mysql_to_rfc3339( $post->post_modified );
         }
          if ( ! empty( $schema['properties']['status'] ) ) {
              $data['status'] = $post->post_status;
@@ -273,15 +284,26 @@ class Technoproject_Courses_Controller extends WP_REST_Controller {
                  'date'              => array(
                     'description' => __( "The date the object was published, in the site's timezone.", 'technoproject' ),
                     'type'        => 'string',
-                    'format'      => 'date-time',
+                    'format'      => 'date-time', // Indicates ISO8601
                     'context'     => array( 'view', 'edit', 'embed' ),
+                 ),
+                 'date_gmt'          => array(
+                    'description' => __( 'The date the object was published, as GMT.', 'technoproject' ),
+                    'type'        => ['string', 'null'], // Can be null if '0000-00-00...'
+                    'format'      => 'date-time',
+                    'context'     => array( 'view', 'edit' ),
                  ),
                  'modified'          => array(
                     'description' => __( "The date the object was last modified, in the site's timezone.", 'technoproject' ),
                     'type'        => 'string',
                     'format'      => 'date-time',
                     'context'     => array( 'view', 'edit' ),
-                    'readonly'    => true,
+                 ),
+                 'modified_gmt'      => array(
+                    'description' => __( 'The date the object was last modified, as GMT.', 'technoproject' ),
+                    'type'        => ['string', 'null'],
+                    'format'      => 'date-time',
+                    'context'     => array( 'view', 'edit' ),
                  ),
                  'status'            => array(
                     'description' => __( 'A named status for the object.', 'technoproject' ),
