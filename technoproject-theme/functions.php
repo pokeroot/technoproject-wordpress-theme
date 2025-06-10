@@ -168,9 +168,15 @@ add_action( 'init', 'technoproject_register_skill_tag_taxonomy', 0 ); // Priorit
 
 // Register API Endpoints
 require_once get_template_directory() . '/includes/api-endpoints/Technoproject_Courses_Controller.php';
+
 add_action( 'rest_api_init', function () {
-    $controller = new Technoproject_Courses_Controller();
-    $controller->register_routes();
+    // Ensure the class name here matches the one in the file.
+    if ( class_exists( 'Technoproject_Courses_Controller' ) ) {
+        $controller = new Technoproject_Courses_Controller();
+        $controller->register_routes();
+    } else {
+        error_log('TECHNO_ERROR: Technoproject_Courses_Controller class not found after attempting to restore.');
+    }
 } );
 
 // Example Security Headers (structure taken from document 6.3)
