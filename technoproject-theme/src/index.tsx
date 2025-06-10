@@ -3,8 +3,8 @@ import React from 'react';
 import ReactDOM from 'react-dom/client';
 import CourseList from './components/organisms/CourseList';
 
-// Placeholder for global styles - create this file later
-// import './styles/globals/main.scss';
+// Import global styles
+import './styles/globals/main.scss';
 
 const container = document.getElementById('root');
 
