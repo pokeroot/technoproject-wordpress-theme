@@ -1,0 +1,88 @@
+// technoproject-theme/src/styles/globals/main.scss
+
+// 1. Settings - Global variables, site-wide settings.
+@import '../settings/variables';
+
+// 2. Tools - Globally used mixins and functions.
+@import '../tools/mixins';
+
+// 3. Generic - Reset and/or normalize styles, box-sizing definition.
+// Example for a simple reset (consider using a more comprehensive one like normalize.css or a modern reset)
+/* Simple Reset */
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html {
+  // Smooth scrolling for anchor links
+  scroll-behavior: smooth;
+  // Better fluid typography and spacing
+  font-size: 100%; // Usually 16px by default, but can be user-defined
+}
+
+body {
+  font-family: $font-family-primary;
+  font-size: $font-size-base;
+  line-height: 1.6;
+  color: $color-gray-700; // Default text color
+  background-color: $color-gray-50; // Default background color
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+// 4. Elements - Styling for bare HTML elements (e.g., h1, A, etc.).
+h1, h2, h3, h4, h5, h6 {
+  font-family: $font-family-heading;
+  color: $color-gray-900; // Default heading color
+  margin-bottom: $spacing-3;
+  line-height: 1.3;
+}
+
+h1 { font-size: $font-size-4xl; }
+h2 { font-size: $font-size-3xl; }
+h3 { font-size: $font-size-2xl; }
+h4 { font-size: $font-size-xl; }
+h5 { font-size: $font-size-lg; }
+h6 { font-size: $font-size-base; }
+
+p {
+  margin-bottom: $spacing-4;
+}
+
+a {
+  color: $color-secondary; // Using secondary color for links
+  text-decoration: none;
+  transition: color $transition-fast;
+
+  &:hover,
+  &:focus {
+    color: darken($color-secondary, 10%);
+    text-decoration: underline;
+  }
+}
+
+img, video {
+  max-width: 100%;
+  height: auto;
+  display: block; // Remove bottom space under images
+}
+
+// 5. Objects - Unstyled design patterns, e.g., media object, grid system (if not using CSS Grid directly in components).
+// .o-container { ... }
+// .o-grid { ... }
+
+// 6. Components - Specific UI components. (These will mostly be in their own .module.scss files)
+// However, you might have some global component overrides or base styles here.
+
+// 7. Utilities - Utility and helper classes.
+// .u-text-center { text-align: center !important; }
+// .u-visually-hidden { @include visually-hidden; } // Example of using a mixin for a utility class
+
+// Example of using a utility class with the visually-hidden mixin
+.sr-only { // Screen-reader only, alias for visually-hidden
+     @include visually-hidden;
+}
