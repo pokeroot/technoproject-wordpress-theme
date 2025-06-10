@@ -47,7 +47,7 @@ function technoproject_register_course_post_type() {
         'description'           => __( 'Post Type para Cursos de Technoproject', 'technoproject' ),
         'labels'                => $labels,
         'supports'              => array( 'title', 'editor', 'thumbnail', 'custom-fields', 'excerpt', 'author', 'revisions' ), // Added excerpt, author, revisions from common practice
-        'taxonomies'            => array( /* 'course_category', 'skill_tag' - will be registered separately */ ),
+        'taxonomies'            => array( 'course_category', 'skill_tag' ),
         'hierarchical'          => false,
         'public'                => true,
         'show_ui'               => true,
@@ -60,8 +60,8 @@ function technoproject_register_course_post_type() {
         'has_archive'           => 'cursos', // As per document 'rewrite' => array('slug' => 'cursos')
         'exclude_from_search'   => false,
         'publicly_queryable'    => true,
-        'capability_type'       => 'course', // As per document
-        'map_meta_cap'          => true,     // As per document
+        'capability_type'       => 'post', // Changed for diagnostics
+        // 'map_meta_cap'          => true, // Less critical if capability_type is 'post'
         'show_in_rest'          => true,     // As per document
         'rest_base'             => 'courses',// As per document
         'rest_controller_class' => 'WP_REST_Posts_Controller', // As per document
