@@ -52,7 +52,7 @@ export interface Course {
   // course_level_enum?: CourseLevel; // TODO: Define and map from 'level' string
   // price?: CoursePrice; // TODO: Define and add as meta
   // rating?: CourseRating; // TODO: Define and add as meta
-  thumbnail_url?: string; // TODO: Get from featured media
+  featured_image_url?: string | null; // URL for the main course image
   // gallery?: string[]; // TODO: Add as meta or use a gallery plugin
   // tags?: string[]; // Covered by skill_tags or could be separate post_tag
   // categories?: Category[]; // Covered by course_categories

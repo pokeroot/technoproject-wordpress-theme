@@ -1,0 +1,105 @@
+// technoproject-theme/src/components/pages/CourseDetailPage/CourseDetailPage.module.scss
+@import '../../../styles/settings/variables';
+@import '../../../styles/tools/mixins';
+
+.courseDetailPage {
+  max-width: 800px; // Example max-width for content readability
+  margin: $spacing-8 auto;
+  padding: $spacing-6;
+  background-color: #fff;
+  border-radius: $radius-md;
+  box-shadow: $shadow-lg;
+}
+
+.featuredImage {
+  width: 100%;
+  max-height: 400px;
+  object-fit: cover;
+  border-radius: $radius-sm;
+  margin-bottom: $spacing-6;
+}
+
+.header {
+  margin-bottom: $spacing-6;
+  border-bottom: 1px solid $color-gray-200;
+  padding-bottom: $spacing-4;
+
+  h1 {
+    font-size: $font-size-5xl; // Large title for detail page
+    margin-bottom: $spacing-3;
+  }
+}
+
+.meta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: $spacing-3;
+  margin-bottom: $spacing-2; // Space below tags if title is short
+}
+
+.tag {
+  background-color: $color-gray-100;
+  color: $color-gray-700;
+  padding: $spacing-1 $spacing-2;
+  border-radius: $radius-sm;
+  font-size: $font-size-sm;
+  text-transform: capitalize;
+}
+
+.level { /* Specific styling if needed */ }
+.format { /* Specific styling if needed */ }
+
+.shortDescription {
+    font-size: $font-size-lg;
+    color: $color-gray-700;
+    margin-bottom: $spacing-4;
+    line-height: 1.7;
+}
+
+.contentSection {
+  font-size: $font-size-base;
+  line-height: 1.8;
+  color: $color-gray-800;
+
+  h2, h3, h4, h5, h6 { // Styles for headings within the content
+    margin-top: $spacing-6;
+    margin-bottom: $spacing-3;
+    font-family: $font-family-heading;
+  }
+  p {
+    margin-bottom: $spacing-4;
+  }
+  ul, ol {
+    margin-bottom: $spacing-4;
+    padding-left: $spacing-5;
+  }
+  // Add more styles for content elements as needed (tables, blockquotes, etc.)
+}
+
+.actions {
+    margin-top: $spacing-8;
+    padding-top: $spacing-4;
+    border-top: 1px solid $color-gray-200;
+}
+
+.backLink {
+    display: inline-block;
+    color: $color-secondary;
+    text-decoration: none;
+    &:hover {
+        text-decoration: underline;
+    }
+}
+
+.loadingState,
+.errorState,
+.emptyState {
+  padding: $spacing-8;
+  text-align: center;
+  font-size: $font-size-lg;
+  color: $color-gray-600;
+}
+
+.errorState {
+  color: $color-error;
+}

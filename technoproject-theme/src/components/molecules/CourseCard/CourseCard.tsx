@@ -1,7 +1,8 @@
 // technoproject-theme/src/components/molecules/CourseCard/CourseCard.tsx
 import React from 'react';
-import { Course } from '../../../types/course.types'; // Adjust path if your tsconfig paths are not picked up by the subtask runner
-import Button from '../../atoms/Button'; // Assuming Button is correctly exported from atoms
+import { Link } from 'react-router-dom'; // Import Link
+import { Course } from '../../../types/course.types';
+import Button from '../../atoms/Button';
 import styles from './CourseCard.module.scss';
 
 export interface CourseCardProps {
@@ -10,10 +11,9 @@ export interface CourseCardProps {
 }
 
 const CourseCard: React.FC<CourseCardProps> = ({ course, className }) => {
-  // Placeholder for featured image - to be added when API provides it
-  // const imageUrl = course._embedded?.['wp:featuredmedia']?.[0]?.source_url || 'https://via.placeholder.com/300x200?text=Course+Image';
-  const imageUrl = `https://via.placeholder.com/300x200?text=${encodeURIComponent(course.title.rendered)}`;
-
+  const imageUrl = course.featured_image_url || `https://via.placeholder.com/300x200?text=${encodeURIComponent(course.title.rendered)}`;
+  // Ensure course.id is available. It should be from our API.
+  const detailUrl = course.id ? `/cursos/${course.id}` : '#'; // Fallback if id is somehow missing
 
   return (
     <article className={`${styles.courseCard} ${className || ''}`}>
@@ -21,7 +21,11 @@ const CourseCard: React.FC<CourseCardProps> = ({ course, className }) => {
         <img src={imageUrl} alt={`Imagen del curso ${course.title.rendered}`} className={styles.image} />
       </div>
       <div className={styles.content}>
-        <h3 className={styles.title}>{course.title.rendered}</h3>
+        <h3 className={styles.title}>
+          {/* Optionally, make the title a link too */}
+          {/* <Link to={detailUrl} className={styles.titleLink}>{course.title.rendered}</Link> */}
+          {course.title.rendered}
+        </h3>
         {course.short_description && (
           <p className={styles.shortDescription}>{course.short_description}</p>
         )}
@@ -34,13 +38,15 @@ const CourseCard: React.FC<CourseCardProps> = ({ course, className }) => {
           )}
         </div>
         <div className={styles.actions}>
-          <Button
-             href={course.link || '#'} // Use actual course link when available
-             variant="primary"
-             size="small"
-          >
-            Ver Detalles
-          </Button>
+          <Link to={detailUrl} className={styles.buttonLinkWrapper}> {/* Wrapper for styling if Button itself is not a Link */}
+            <Button
+               variant="primary"
+               size="small"
+               // No href or 'to' here, Link handles navigation
+            >
+              Ver Detalles
+            </Button>
+          </Link>
         </div>
       </div>
     </article>

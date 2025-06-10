@@ -23,6 +23,53 @@ class Technoproject_Courses_Controller extends WP_REST_Controller {
      */
     protected $rest_base = 'courses';
 
+    // Store the post type for this controller.
+    protected $post_type;
+
+    /**
+     * Constructor.
+     */
+    public function __construct() {
+        parent::__construct();
+        $this->post_type = 'course';
+    }
+
+    /**
+     * Retrieves a single course.
+     *
+     * @param WP_REST_Request $request Full data about the request.
+     * @return WP_REST_Response|WP_Error Response object on success, or WP_Error object on failure.
+     */
+    public function get_item( $request ) {
+        $id = (int) $request['id'];
+        $post = get_post( $id );
+
+        // Check if post exists and is of the correct type
+        if ( empty( $post ) || $post->post_type !== $this->post_type ) {
+            return new WP_Error(
+                'rest_post_invalid_id',
+                __( 'Invalid course ID.', 'technoproject' ),
+                array( 'status' => 404 )
+            );
+        }
+
+        // Check if post is published (if not editable by current user)
+        // This check is basic; a more robust permission check is in get_item_permissions_check
+        // or could be expanded here based on $request['context'] if needed.
+        if ( 'publish' !== $post->post_status && ! current_user_can( 'edit_post', $id ) ) {
+           return new WP_Error(
+               'rest_forbidden_context',
+               __( 'Sorry, you are not allowed to view this course.', 'technoproject' ),
+               array( 'status' => rest_authorization_required_code() )
+           );
+        }
+
+        $data = $this->prepare_item_for_response( $post, $request );
+        $response = rest_ensure_response( $data );
+
+        return $response;
+    }
+
     /**
      * Registers the routes for the objects of the controller.
      */
@@ -44,13 +91,37 @@ class Technoproject_Courses_Controller extends WP_REST_Controller {
                 // 'permission_callback' => array( $this, 'create_item_permissions_check' ),
                 // 'args' => $this->get_endpoint_args_for_item_schema( WP_REST_Server::CREATABLE ),
                 // ),
-                'schema' => array( $this, 'get_public_item_schema' ), // Define a schema
+                'schema' => array( $this, 'get_public_item_schema' ), // Schema for the collection's items
+            )
+        );
+
+        register_rest_route(
+            $this->namespace,
+            '/' . $this->rest_base . '/(?P<id>[\d]+)', // Matches /courses/{id}
+            array(
+                'args' => array(
+                    'id' => array(
+                        'description' => __( 'Unique identifier for the course.', 'technoproject' ),
+                        'type'        => 'integer',
+                        'required'    => true,
+                    ),
+                ),
+                array(
+                    'methods'             => WP_REST_Server::READABLE,
+                    'callback'            => array( $this, 'get_item' ),
+                    'permission_callback' => array( $this, 'get_item_permissions_check' ),
+                    'args'                => array(
+                        'context'          => $this->get_context_param( array( 'default' => 'view' ) ),
+                    ),
+                ),
+                // Placeholder for future EDITABLE (PUT/PATCH) and DELETABLE routes
+                'schema' => array( $this, 'get_public_item_schema' ), // Schema for the single item
             )
         );
     }
 
     /**
-     * Checks if a given request has access to get items.
+     * Checks if a given request has access to get items (collection).
      *
      * @param WP_REST_Request $request Full data about the request.
      * @return true|WP_Error True if the request has read access, WP_Error object otherwise.
@@ -58,6 +129,23 @@ class Technoproject_Courses_Controller extends WP_REST_Controller {
     public function get_items_permissions_check( $request ) {
         // For now, allow public access to view courses.
         // Add more granular checks if needed, e.g., based on user roles or capabilities.
+        return true;
+    }
+
+    /**
+     * Checks if a given request has access to get a specific item.
+     *
+     * @param WP_REST_Request $request Full data about the request.
+     * @return true|WP_Error True if the request has read access, WP_Error object otherwise.
+     */
+    public function get_item_permissions_check( $request ) {
+        // For now, allow public access.
+        // Could be enhanced:
+        // $post = get_post( (int) $request['id'] );
+        // if ( $post && $this->post_type === $post->post_type && 'publish' === $post->post_status ) {
+        //     return true;
+        // }
+        // return new WP_Error( 'rest_forbidden', esc_html__( 'Cannot view item.', 'technoproject' ), array( 'status' => is_user_logged_in() ? 403 : 401 ) );
         return true;
     }
 
@@ -192,6 +280,19 @@ class Technoproject_Courses_Controller extends WP_REST_Controller {
         }
         if ( ! empty( $schema['properties']['skill_tags'] ) ) {
             $data['skill_tags'] = $this->get_taxonomy_terms( $post->ID, 'skill_tag' );
+        }
+
+        if ( ! empty( $schema['properties']['featured_image_url'] ) ) {
+            $featured_image_id = get_post_thumbnail_id( $post->ID );
+            if ( $featured_image_id ) {
+                // Get a specific image size, e.g., 'large'. Fallback to full if not available.
+                $image_url_large = wp_get_attachment_image_url( $featured_image_id, 'large' );
+                $image_url_full = wp_get_attachment_image_url( $featured_image_id, 'full' );
+
+                $data['featured_image_url'] = $image_url_large ? $image_url_large : $image_url_full;
+            } else {
+                $data['featured_image_url'] = null; // Or a default placeholder image URL
+            }
         }
 
         $context = ! empty( $request['context'] ) ? $request['context'] : 'view';
@@ -351,6 +452,12 @@ class Technoproject_Courses_Controller extends WP_REST_Controller {
                              'slug' => array( 'type' => 'string' ),
                          ),
                      ),
+                     'context'     => array( 'view', 'edit', 'embed' ),
+                 ),
+                 'featured_image_url' => array(
+                     'description' => __( 'URL of the course\'s featured image (large size).', 'technoproject' ),
+                     'type'        => ['string', 'null'], // Can be null if no image
+                     'format'      => 'uri',
                      'context'     => array( 'view', 'edit', 'embed' ),
                  ),
              ),
