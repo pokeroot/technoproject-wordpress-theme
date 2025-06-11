@@ -167,9 +167,11 @@ add_action( 'init', 'technoproject_register_skill_tag_taxonomy', 0 ); // Priorit
 // add_action( 'init', 'add_technoproject_user_roles' );
 
 // Register API Endpoints
-require_once get_template_directory() . '/includes/api-endpoints/Technoproject_Courses_Controller.php';
 
 add_action( 'rest_api_init', function () {
+require_once get_template_directory() . '/includes/api-endpoints/Technoproject_Courses_Controller.php';
+
+
     // Ensure the class name here matches the one in the file.
     if ( class_exists( 'Technoproject_Courses_Controller' ) ) {
         $controller = new Technoproject_Courses_Controller();
