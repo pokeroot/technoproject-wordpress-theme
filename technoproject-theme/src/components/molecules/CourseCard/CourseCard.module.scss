@@ -82,16 +82,22 @@
   padding: $spacing-1 $spacing-2;
   border-radius: $radius-sm;
   font-size: $font-size-xs;
-  text-transform: capitalize;
+  text-transform: capitalize; // Or none, depending on desired style
+  font-weight: 500; // Slightly bolder tags
 }
 
 .level {
-  // Specific styling for level tag if needed
-  // Example: border-left: 3px solid $color-secondary;
+  // Override base tag style for level
+  background-color: lighten($primary-color, 55%); // Very light version of primary color
+  color: $primary-color-dark; // Darker shade of primary for text
+  // border-left: 3px solid $primary-color; // Optional: for emphasis
 }
 
 .format {
-  // Specific styling for format tag if needed
+  // Override base tag style for format
+  background-color: lighten($secondary-color, 35%); // Very light version of secondary color
+  color: darken($secondary-color, 15%); // Darker shade of secondary for text
+  // border-left: 3px solid $secondary-color; // Optional: for emphasis
 }
 
 .actions {

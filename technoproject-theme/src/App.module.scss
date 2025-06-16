@@ -1,0 +1,16 @@
+@import './styles/settings/variables'; // Adjust path as needed
+
+.appWrapper {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+}
+
+.mainContent {
+  flex-grow: 1; // Ensures footer stays at the bottom
+  padding: $spacing-6; // Default padding for main content area
+
+  @include breakpoint(md) {
+    padding: $spacing-8;
+  }
+}

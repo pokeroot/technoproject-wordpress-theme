@@ -95,3 +95,37 @@ $container-max-width-md: 720px;
 $container-max-width-lg: 960px;
 $container-max-width-xl: 1140px;
 $container-max-width-xxl: 1320px;
+
+// Main Theme Colors (Placeholder - Replace with actual logo colors)
+$primary-color: #007bff; // Vibrant Blue
+$secondary-color: #fd7e14; // Bright Orange
+
+// Neutral Colors
+$text-color-dark: #212529; // Dark Gray/Off-Black for text
+$background-color-light: #f8f9fa; // Light Gray for section backgrounds
+$background-color-white: #ffffff; // White for main content backgrounds
+$border-color: #dee2e6; // Subtle border color
+
+// Feedback Colors
+$success-color: #28a745; // Green for success
+$error-color: #dc3545; // Red for errors
+$warning-color: #ffc107; // Yellow for warnings
+
+// Optional: Additional shades for depth (can be generated from primary)
+$primary-color-dark: darken($primary-color, 10%);
+$primary-color-light: lighten($primary-color, 10%);
+
+// Example of how they might be used (comments for now)
+// body {
+//   background-color: $background-color-white;
+//   color: $text-color-dark;
+// }
+
+// .button-primary {
+//   background-color: $primary-color;
+//   color: white;
+// }
+
+// .text-accent {
+//   color: $secondary-color;
+// }

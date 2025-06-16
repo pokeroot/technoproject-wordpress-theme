@@ -1,0 +1,40 @@
+@import '../../../styles/settings/variables'; // Adjust path as needed
+@import '../../../styles/tools/mixins';       // Adjust path as needed
+
+.header {
+  background-color: $background-color-white; // Example using variables
+  padding: $spacing-4 $spacing-6;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border-bottom: 1px solid $border-color;
+  box-shadow: $shadow-sm;
+
+  // Basic responsiveness for stacking logo and nav
+  @include breakpoint(md) {
+    // Potentially different layout for larger screens if needed
+  }
+}
+
+.logo {
+  a {
+    font-size: $font-size-xl;
+    font-weight: bold;
+    color: $primary-color; // Using a theme color
+    text-decoration: none;
+  }
+}
+
+.nav {
+  .navLink {
+    margin-left: $spacing-4;
+    text-decoration: none;
+    color: $text-color-dark;
+    font-weight: 500;
+
+    &:hover {
+      color: $primary-color;
+      text-decoration: underline;
+    }
+  }
+}

@@ -1,0 +1,17 @@
+@import '../../../styles/settings/variables'; // Adjust path as needed
+
+.footer {
+  background-color: $color-gray-800; // Dark background for footer
+  color: $color-gray-300;
+  padding: $spacing-8 $spacing-6;
+  text-align: center;
+  margin-top: $spacing-10; // Give some space above the footer
+}
+
+.footerContent {
+  // Future: Use flex or grid for more complex footer layouts
+  p {
+    margin: 0;
+    font-size: $font-size-sm;
+  }
+}
