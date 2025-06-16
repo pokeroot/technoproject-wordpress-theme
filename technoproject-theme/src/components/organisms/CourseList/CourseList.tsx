@@ -2,6 +2,7 @@
 import React, { useEffect, useState } from 'react';
 import { Course } from '../../../types/course.types'; // Adjust path if needed
 import CourseCard from '../../molecules/CourseCard'; // Adjust path if needed
+import { Spinner } from '../../atoms/Spinner'; // Adjust path as needed
 import styles from './CourseList.module.scss';
 
 export interface CourseListProps {
@@ -48,7 +49,13 @@ const CourseList: React.FC<CourseListProps> = ({ className }) => {
   }, []); // Empty dependency array means this effect runs once on mount
 
   if (isLoading) {
-    return <div className={styles.loadingState}>Cargando cursos...</div>;
+    return (
+      <div className={styles.loadingState}>
+        <Spinner size="large" color="primary" />
+        {/* Optional: Keep text or remove it if spinner is clear enough */}
+        {/* <p>Cargando cursos...</p> */}
+      </div>
+    );
   }
 
   if (error) {

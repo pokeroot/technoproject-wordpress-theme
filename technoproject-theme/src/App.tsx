@@ -3,22 +3,17 @@ import React from 'react';
 import { BrowserRouter, Routes, Route, Link } from 'react-router-dom';
 import CourseList from './components/organisms/CourseList';
 import CourseDetailPage from './components/pages/CourseDetailPage'; // Import the actual component
+import { Header } from './components/organisms/Header'; // Assuming index.ts exports it
+import { Footer } from './components/organisms/Footer'; // Assuming index.ts exports it
+import styles from './App.module.scss'; // Create this file for App/Layout specific styles
 
 const Layout: React.FC<{ children: React.ReactNode }> = ({ children }) => (
-  <div>
-    <header style={{ padding: '20px', backgroundColor: '#f0f0f0', textAlign: 'center' }}>
-      <nav>
-        <Link to="/" style={{ marginRight: '10px' }}>Inicio</Link>
-        <Link to="/cursos" style={{ marginRight: '10px' }}>Cursos</Link>
-        {/* Assuming /cursos will also show CourseList or a catalog page later */}
-      </nav>
-    </header>
-    <main style={{ padding: '20px' }}>
+  <div className={styles.appWrapper}> {/* Optional: for overall app structure */}
+    <Header />
+    <main className={styles.mainContent}> {/* Add class for styling */}
       {children}
     </main>
-    <footer style={{ padding: '20px', backgroundColor: '#333', color: 'white', textAlign: 'center', marginTop: '40px' }}>
-      <p>&copy; {new Date().getFullYear()} Technoproject. Todos los derechos reservados.</p>
-    </footer>
+    <Footer />
   </div>
 );
 

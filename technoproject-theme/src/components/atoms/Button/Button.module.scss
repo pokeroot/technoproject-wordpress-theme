@@ -23,6 +23,11 @@
     cursor: not-allowed;
   }
 
+  &:focus-visible {
+    @include focus-ring($color-secondary, 3px); // Using secondary color for focus ring on all buttons for consistency
+                                                // or choose a specific focus color. $color-primary could also be an option.
+  }
+
   // Variants
   &.primary {
     // Example using mixin from section 5.2
@@ -30,14 +35,23 @@
   }
 
   &.secondary {
-    @include button-variant($color-secondary, $color-primary);
-    // Or, if secondary is an outline button:
-    // background-color: transparent;
-    // color: $color-primary;
-    // border-color: $color-primary;
-    // &:hover:not(:disabled) {
-    //   background-color: rgba($color-primary, 0.1);
-    // }
+    background-color: transparent;
+    color: $color-secondary;
+    border: 1px solid $color-secondary;
+
+    &:hover:not(:disabled):not(.loading) {
+      background-color: rgba($color-secondary, 0.1); // Light cyan background on hover
+      color: darken($color-secondary, 5%); // Slightly darken text for better visibility on hover
+      border-color: $color-secondary; // Keep border color
+      transform: translateY(-1px); // Keep from original mixin idea
+      box-shadow: $shadow-md;       // Keep from original mixin idea
+    }
+
+    &:active:not(:disabled):not(.loading) {
+      background-color: rgba($color-secondary, 0.2); // Slightly darker for active
+      transform: translateY(0);
+      box-shadow: $shadow-sm;
+    }
   }
 
   &.tertiary {

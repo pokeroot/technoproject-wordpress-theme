@@ -1,0 +1,57 @@
+@import '../../../styles/settings/variables';
+@import '../../../styles/tools/mixins'; // For visually-hidden if not globally applied
+
+.spinner {
+  display: inline-block;
+  border-radius: 50%;
+  animation: spin 0.75s linear infinite;
+  border-style: solid; // Ensure border style is set before color
+
+  // Default to medium size, primary color
+  border-width: 3px; // Default medium size
+  border-color: $primary-color; // Default primary color
+  border-right-color: transparent;
+  width: 2em; // Default medium size
+  height: 2em; // Default medium size
+}
+
+.small {
+  border-width: 2px;
+  width: 1.25em;
+  height: 1.25em;
+}
+
+.large {
+  border-width: 4px;
+  width: 3em;
+  height: 3em;
+}
+
+// Color variants
+.primary {
+  border-color: $primary-color;
+  border-right-color: transparent;
+}
+
+.secondary {
+  border-color: $color-secondary;
+  border-right-color: transparent;
+}
+
+.inherit {
+  border-color: currentColor;
+  border-right-color: transparent;
+}
+
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+// Visually hidden class for accessibility, can use mixin if available globally
+// Or define it here if this component is self-contained.
+// Assuming .sr-only or similar is available from main.scss or a global import
+.visuallyHidden {
+  @include visually-hidden;
+}
